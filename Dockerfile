@@ -71,7 +71,7 @@ RUN apt-get update && apt-get install -yqq \
 	./configure --prefix=/opt/bitnami/nginx \
 		--with-http_stub_status_module --with-http_gzip_static_module --with-http_realip_module --with-http_v2_module --with-http_ssl_module --with-http_sub_module \
 		--with-mail --with-mail_ssl_module \
-		--add-dynamic-module=$HOME/ngx_pagespeed-${NPS_VERSION}-beta \
+		--add-dynamic-module=$HOME/incubator-pagespeed-ngx-${NPS_VERSION}-beta \
 		--add-dynamic-module=$HOME/headers-more-nginx-module-${NGINX_HEADERS_MORE_VERSION} \
 		--add-dynamic-module=$HOME/ngx_devel_kit-${NGINX_DEVEL_KIT_VERSION} \
 		--add-dynamic-module=$HOME/set-misc-nginx-module-${NGINX_SET_MISC_VERSION} \
