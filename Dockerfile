@@ -8,7 +8,7 @@ ENV NOVA_IMAGE_VERSION=1.0.0 \
     BITNAMI_APP_NAME=nginx-mod \
     PATH=/opt/bitnami/nginx/sbin:$PATH \
     NGINX_VERSION="1.11.12" \    
-    NPS_VERSION="1.12.34.2" \
+    NPS_VERSION="1.13.35.2-beta" \
     NGINX_HEADERS_MORE_VERSION="0.32" \
     NGINX_SET_MISC_VERSION="0.31" \
     NGINX_DEVEL_KIT_VERSION="0.3.0"
@@ -44,10 +44,13 @@ RUN apt-get update && apt-get install -yqq \
 	build-essential zlib1g-dev libpcre3-dev libssl-dev unzip wget && \
 	`# module pagespeed` && \ 
 	cd && \ 
-	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.zip && \
-	unzip v${NPS_VERSION}-beta.zip && \
-	cd incubator-pagespeed-ngx-${NPS_VERSION}-beta/ && \
-	psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz && \
+	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}.zip && \
+	unzip v${NPS_VERSION}.zip && \
+	nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d) && \
+	cd "$nps_dir" && \
+	NPS_RELEASE_NUMBER=${NPS_VERSION/beta/} && \
+	NPS_RELEASE_NUMBER=${NPS_VERSION/stable/} && \
+	psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz && \
 	[ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL) && \
 	wget ${psol_url} && \
 	tar -xzvf $(basename ${psol_url}) `# extracts to psol/` && \
@@ -71,7 +74,7 @@ RUN apt-get update && apt-get install -yqq \
 	./configure --prefix=/opt/bitnami/nginx \
 		--with-http_stub_status_module --with-http_gzip_static_module --with-http_realip_module --with-http_v2_module --with-http_ssl_module --with-http_sub_module \
 		--with-mail --with-mail_ssl_module \
-		--add-dynamic-module=$HOME/incubator-pagespeed-ngx-${NPS_VERSION}-beta \
+		--add-dynamic-module=$HOME/$nps_dir \
 		--add-dynamic-module=$HOME/headers-more-nginx-module-${NGINX_HEADERS_MORE_VERSION} \
 		--add-dynamic-module=$HOME/ngx_devel_kit-${NGINX_DEVEL_KIT_VERSION} \
 		--add-dynamic-module=$HOME/set-misc-nginx-module-${NGINX_SET_MISC_VERSION} \
