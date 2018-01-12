@@ -46,7 +46,7 @@ RUN apt-get update && apt-get install -yqq \
 	cd && \ 
 	wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}.zip && \
 	unzip v${NPS_VERSION}.zip && \
-	nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d) && \
+	nps_dir="incubator-pagespeed-ngx-${NPS_VERSION}" && \
 	cd "$nps_dir" && \
 	NPS_RELEASE_NUMBER=${NPS_VERSION/-beta/} && \
 	psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz && \
